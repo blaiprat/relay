@@ -30,30 +30,32 @@ var find = require('./find');
 var invariant = require('./invariant');
 var util = require('./util');
 
-var _require = require('./GraphQL');
+var _require = require('./RelayQLNodeInterface'),
+    ID = _require.ID;
 
-var types = _require.type;
-var GraphQLDirective = _require.type_directives.GraphQLDirective;
-var _require$type_scalars = _require.type_scalars;
-var GraphQLBoolean = _require$type_scalars.GraphQLBoolean;
-var GraphQLFloat = _require$type_scalars.GraphQLFloat;
-var GraphQLID = _require$type_scalars.GraphQLID;
-var GraphQLInt = _require$type_scalars.GraphQLInt;
-var GraphQLString = _require$type_scalars.GraphQLString;
-var _require$type_introsp = _require.type_introspection;
-var SchemaMetaFieldDef = _require$type_introsp.SchemaMetaFieldDef;
-var TypeMetaFieldDef = _require$type_introsp.TypeMetaFieldDef;
-var TypeNameMetaFieldDef = _require$type_introsp.TypeNameMetaFieldDef;
-
-var _require2 = require('./RelayQLNodeInterface');
-
-var ID = _require2.ID;
-
+var _require2 = require('graphql'),
+    GraphQLBoolean = _require2.GraphQLBoolean,
+    GraphQLDirective = _require2.GraphQLDirective,
+    GraphQLEnumType = _require2.GraphQLEnumType,
+    GraphQLFloat = _require2.GraphQLFloat,
+    GraphQLID = _require2.GraphQLID,
+    GraphQLInputObjectType = _require2.GraphQLInputObjectType,
+    GraphQLInt = _require2.GraphQLInt,
+    GraphQLInterfaceType = _require2.GraphQLInterfaceType,
+    GraphQLList = _require2.GraphQLList,
+    GraphQLNonNull = _require2.GraphQLNonNull,
+    GraphQLObjectType = _require2.GraphQLObjectType,
+    GraphQLScalarType = _require2.GraphQLScalarType,
+    GraphQLString = _require2.GraphQLString,
+    GraphQLUnionType = _require2.GraphQLUnionType,
+    isAbstractType = _require2.isAbstractType,
+    SchemaMetaFieldDef = _require2.SchemaMetaFieldDef,
+    TypeMetaFieldDef = _require2.TypeMetaFieldDef,
+    TypeNameMetaFieldDef = _require2.TypeNameMetaFieldDef;
 
 var GraphQLRelayDirectiveInstance = new GraphQLDirective(GraphQLRelayDirective);
 
 // TODO: Import types from `graphql`.
-
 
 var RelayQLNode = function () {
   function RelayQLNode(context, ast) {
@@ -146,7 +148,7 @@ var RelayQLDefinition = function (_RelayQLNode) {
   function RelayQLDefinition() {
     _classCallCheck(this, RelayQLDefinition);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLDefinition).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RelayQLDefinition.__proto__ || Object.getPrototypeOf(RelayQLDefinition)).apply(this, arguments));
   }
 
   _createClass(RelayQLDefinition, [{
@@ -184,7 +186,7 @@ var RelayQLFragment = function (_RelayQLDefinition) {
     // @relay(isStaticFragment: true)
     var isStaticFragment = relayDirectiveArgs.isStaticFragment && relayDirectiveArgs.isStaticFragment.kind === 'BooleanValue' && relayDirectiveArgs.isStaticFragment.value;
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLFragment).call(this, _extends({}, context, { isPattern: isPattern }), ast));
+    var _this4 = _possibleConstructorReturn(this, (RelayQLFragment.__proto__ || Object.getPrototypeOf(RelayQLFragment)).call(this, _extends({}, context, { isPattern: isPattern }), ast));
 
     _this4.hasStaticFragmentID = isStaticFragment;
     _this4.parentType = parentType;
@@ -236,7 +238,7 @@ var RelayQLMutation = function (_RelayQLDefinition2) {
   function RelayQLMutation() {
     _classCallCheck(this, RelayQLMutation);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLMutation).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RelayQLMutation.__proto__ || Object.getPrototypeOf(RelayQLMutation)).apply(this, arguments));
   }
 
   _createClass(RelayQLMutation, [{
@@ -255,7 +257,7 @@ var RelayQLQuery = function (_RelayQLDefinition3) {
   function RelayQLQuery() {
     _classCallCheck(this, RelayQLQuery);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLQuery).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RelayQLQuery.__proto__ || Object.getPrototypeOf(RelayQLQuery)).apply(this, arguments));
   }
 
   _createClass(RelayQLQuery, [{
@@ -274,7 +276,7 @@ var RelayQLSubscription = function (_RelayQLDefinition4) {
   function RelayQLSubscription() {
     _classCallCheck(this, RelayQLSubscription);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLSubscription).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RelayQLSubscription.__proto__ || Object.getPrototypeOf(RelayQLSubscription)).apply(this, arguments));
   }
 
   _createClass(RelayQLSubscription, [{
@@ -293,7 +295,7 @@ var RelayQLField = function (_RelayQLNode2) {
   function RelayQLField(context, ast, parentType) {
     _classCallCheck(this, RelayQLField);
 
-    var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLField).call(this, context, ast));
+    var _this8 = _possibleConstructorReturn(this, (RelayQLField.__proto__ || Object.getPrototypeOf(RelayQLField)).call(this, context, ast));
 
     var fieldName = _this8.ast.name.value;
     var fieldDef = parentType.getFieldDefinition(fieldName, ast);
@@ -374,7 +376,7 @@ var RelayQLFragmentSpread = function (_RelayQLNode3) {
   function RelayQLFragmentSpread() {
     _classCallCheck(this, RelayQLFragmentSpread);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLFragmentSpread).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RelayQLFragmentSpread.__proto__ || Object.getPrototypeOf(RelayQLFragmentSpread)).apply(this, arguments));
   }
 
   _createClass(RelayQLFragmentSpread, [{
@@ -398,7 +400,7 @@ var RelayQLInlineFragment = function (_RelayQLNode4) {
   function RelayQLInlineFragment(context, ast, parentType) {
     _classCallCheck(this, RelayQLInlineFragment);
 
-    var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(RelayQLInlineFragment).call(this, context, ast));
+    var _this11 = _possibleConstructorReturn(this, (RelayQLInlineFragment.__proto__ || Object.getPrototypeOf(RelayQLInlineFragment)).call(this, context, ast));
 
     _this11.parentType = parentType;
     return _this11;
@@ -529,11 +531,10 @@ var RelayQLType = function () {
 
     this.context = context;
 
-    var _stripMarkerTypes = stripMarkerTypes(schemaModifiedType);
-
-    var isListType = _stripMarkerTypes.isListType;
-    var isNonNullType = _stripMarkerTypes.isNonNullType;
-    var schemaUnmodifiedType = _stripMarkerTypes.schemaUnmodifiedType;
+    var _stripMarkerTypes = stripMarkerTypes(schemaModifiedType),
+        isListType = _stripMarkerTypes.isListType,
+        isNonNullType = _stripMarkerTypes.isNonNullType,
+        schemaUnmodifiedType = _stripMarkerTypes.schemaUnmodifiedType;
 
     this.isListType = isListType;
     this.isNonNullType = isNonNullType;
@@ -544,7 +545,7 @@ var RelayQLType = function () {
   _createClass(RelayQLType, [{
     key: 'canHaveSubselections',
     value: function canHaveSubselections() {
-      return !(this.schemaUnmodifiedType instanceof types.GraphQLScalarType || this.schemaUnmodifiedType instanceof types.GraphQLEnumType);
+      return !(this.schemaUnmodifiedType instanceof GraphQLScalarType || this.schemaUnmodifiedType instanceof GraphQLEnumType);
     }
   }, {
     key: 'getName',
@@ -563,8 +564,8 @@ var RelayQLType = function () {
     value: function getFieldDefinition(fieldName, fieldAST) {
       var type = this.schemaUnmodifiedType;
       var isQueryType = type === this.context.schema.getQueryType();
-      var hasTypeName = type instanceof types.GraphQLObjectType || type instanceof types.GraphQLInterfaceType || type instanceof types.GraphQLUnionType;
-      var hasFields = type instanceof types.GraphQLObjectType || type instanceof types.GraphQLInterfaceType;
+      var hasTypeName = type instanceof GraphQLObjectType || type instanceof GraphQLInterfaceType || type instanceof GraphQLUnionType;
+      var hasFields = type instanceof GraphQLObjectType || type instanceof GraphQLInterfaceType;
 
       var schemaFieldDef = void 0;
       if (isQueryType && fieldName === SchemaMetaFieldDef.name) {
@@ -582,12 +583,12 @@ var RelayQLType = function () {
         if (hasTypeName && fieldName === '__type__') {
           schemaFieldDef = {
             name: '__type__',
-            type: new types.GraphQLNonNull(this.context.schema.getType('Type')),
+            type: new GraphQLNonNull(this.context.schema.getType('Type')),
             description: 'The introspected type of this object.',
             deprecatedReason: 'Use __typename',
             args: []
           };
-        } else if (types.isAbstractType(type) && fieldAST && fieldAST.directives && fieldAST.directives.some(function (directive) {
+        } else if (isAbstractType(type) && fieldAST && fieldAST.directives && fieldAST.directives.some(function (directive) {
           return directive.name.value === 'fixme_fat_interface';
         })) {
           var possibleTypes = this.context.schema.getPossibleTypes(type);
@@ -627,7 +628,7 @@ var RelayQLType = function () {
     value: function getInterfaces() {
       var _this15 = this;
 
-      if (this.schemaUnmodifiedType instanceof types.GraphQLObjectType) {
+      if (this.schemaUnmodifiedType instanceof GraphQLObjectType) {
         return this.schemaUnmodifiedType.getInterfaces().map(function (schemaInterface) {
           return new RelayQLType(_this15.context, schemaInterface);
         });
@@ -655,7 +656,7 @@ var RelayQLType = function () {
   }, {
     key: 'isAbstract',
     value: function isAbstract() {
-      return types.isAbstractType(this.schemaUnmodifiedType);
+      return isAbstractType(this.schemaUnmodifiedType);
     }
   }, {
     key: 'isList',
@@ -749,7 +750,6 @@ var RelayQLType = function () {
           }
         }
       };
-      // ID field will be generated by the printer; we won't declare it here.
       return new RelayQLFragment(this.context, generatedFragmentAST, this);
     }
   }]);
@@ -809,11 +809,10 @@ var RelayQLArgumentType = function () {
   function RelayQLArgumentType(schemaModifiedArgType) {
     _classCallCheck(this, RelayQLArgumentType);
 
-    var _stripMarkerTypes2 = stripMarkerTypes(schemaModifiedArgType);
-
-    var isListType = _stripMarkerTypes2.isListType;
-    var isNonNullType = _stripMarkerTypes2.isNonNullType;
-    var schemaUnmodifiedType = _stripMarkerTypes2.schemaUnmodifiedType;
+    var _stripMarkerTypes2 = stripMarkerTypes(schemaModifiedArgType),
+        isListType = _stripMarkerTypes2.isListType,
+        isNonNullType = _stripMarkerTypes2.isNonNullType,
+        schemaUnmodifiedType = _stripMarkerTypes2.schemaUnmodifiedType;
 
     this.isListType = isListType;
     this.isNonNullType = isNonNullType;
@@ -842,17 +841,17 @@ var RelayQLArgumentType = function () {
   }, {
     key: 'isBoolean',
     value: function isBoolean() {
-      return this.schemaUnmodifiedArgType === types.GraphQLBoolean;
+      return this.schemaUnmodifiedArgType === GraphQLBoolean;
     }
   }, {
     key: 'isEnum',
     value: function isEnum() {
-      return this.schemaUnmodifiedArgType instanceof types.GraphQLEnumType;
+      return this.schemaUnmodifiedArgType instanceof GraphQLEnumType;
     }
   }, {
     key: 'isID',
     value: function isID() {
-      return this.schemaUnmodifiedArgType === types.GraphQLID;
+      return this.schemaUnmodifiedArgType === GraphQLID;
     }
   }, {
     key: 'isList',
@@ -867,22 +866,22 @@ var RelayQLArgumentType = function () {
   }, {
     key: 'isNumber',
     value: function isNumber() {
-      return this.schemaUnmodifiedArgType === types.GraphQLFloat || this.schemaUnmodifiedArgType === types.GraphQLInt;
+      return this.schemaUnmodifiedArgType === GraphQLFloat || this.schemaUnmodifiedArgType === GraphQLInt;
     }
   }, {
     key: 'isObject',
     value: function isObject() {
-      return this.schemaUnmodifiedArgType instanceof types.GraphQLInputObjectType;
+      return this.schemaUnmodifiedArgType instanceof GraphQLInputObjectType;
     }
   }, {
     key: 'isScalar',
     value: function isScalar() {
-      return this.schemaUnmodifiedArgType instanceof types.GraphQLScalarType;
+      return this.schemaUnmodifiedArgType instanceof GraphQLScalarType;
     }
   }, {
     key: 'isString',
     value: function isString() {
-      return this.schemaUnmodifiedArgType === types.GraphQLString;
+      return this.schemaUnmodifiedArgType === GraphQLString;
     }
   }]);
 
@@ -894,9 +893,9 @@ function stripMarkerTypes(schemaModifiedType) {
   var isNonNullType = false;
   var schemaUnmodifiedType = schemaModifiedType;
   while (true) {
-    if (schemaUnmodifiedType instanceof types.GraphQLList) {
+    if (schemaUnmodifiedType instanceof GraphQLList) {
       isListType = true;
-    } else if (schemaUnmodifiedType instanceof types.GraphQLNonNull) {
+    } else if (schemaUnmodifiedType instanceof GraphQLNonNull) {
       isNonNullType = true;
     } else {
       break;
